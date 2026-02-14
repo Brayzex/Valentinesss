@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
 <title>Valentine 💘</title>
 
 <style>
@@ -15,12 +15,11 @@
     --shadow: rgba(0,0,0,.22);
     --text:#fff;
   }
-
   *{ box-sizing:border-box; }
+  html, body { height:100%; }
 
   body{
     margin:0;
-    min-height:100vh;
     overflow:hidden;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
     color:var(--text);
@@ -30,6 +29,7 @@
       linear-gradient(135deg, var(--pink1), var(--pink2), var(--pink3));
     display:grid;
     place-items:center;
+    padding:16px;
   }
 
   #floatLayer{
@@ -48,26 +48,25 @@
     box-shadow: 0 12px 28px rgba(0,0,0,.25);
     opacity:.95;
     animation: drift linear infinite;
+    will-change: transform;
   }
-
   .floater.rose{
     width:74px;
     height:74px;
     border-radius:14px;
   }
-
   @keyframes drift{
-    0%{transform:translate(0,0);}
-    25%{transform:translate(220px,-140px);}
-    50%{transform:translate(-140px,-280px);}
-    75%{transform:translate(-260px,-90px);}
-    100%{transform:translate(0,0);}
+    0%{transform:translate3d(0,0,0);}
+    25%{transform:translate3d(220px,-140px,0);}
+    50%{transform:translate3d(-140px,-280px,0);}
+    75%{transform:translate3d(-260px,-90px,0);}
+    100%{transform:translate3d(0,0,0);}
   }
 
   .card{
     width:min(740px, 92vw);
     text-align:center;
-    padding:28px 22px;
+    padding: clamp(18px, 4vw, 28px) clamp(16px, 4vw, 22px);
     border-radius:26px;
     background: var(--card);
     border:1px solid var(--border);
@@ -76,13 +75,18 @@
     z-index:5;
   }
 
-  h1{margin:0 0 8px;font-size:clamp(26px,4.2vw,44px);}
-  p{margin:0 0 18px;}
+  h1{
+    margin:0 0 8px;
+    font-size: clamp(22px, 5vw, 44px);
+    line-height:1.15;
+    text-wrap: balance;
+  }
+  p{ margin:0 0 18px; font-size: clamp(14px, 3.8vw, 16px); }
 
   .btnRow{
     display:flex;
     justify-content:center;
-    gap:14px;
+    gap:12px;
     flex-wrap:wrap;
   }
 
@@ -95,6 +99,16 @@
     font-size:18px;
     min-width:160px;
     color:#fff;
+    transition: transform .15s ease, filter .15s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  button:hover{ filter: brightness(1.06); }
+  button:active{ transform: translateY(1px) scale(.99); }
+
+  @media (max-width: 420px){
+    button{ width:100%; min-width:unset; }
+    .btnRow{ gap:10px; }
   }
 
   #yesBtn{background:linear-gradient(180deg,#34d399,#16a34a);}
@@ -108,12 +122,8 @@
     animation: fall linear forwards;
     z-index:999;
   }
-
   @keyframes fall{
-    to{
-      transform:translateY(120vh) rotate(900deg);
-      opacity:0;
-    }
+    to{ transform:translateY(120vh) rotate(900deg); opacity:0; }
   }
 
   #yesOverlay{
@@ -123,35 +133,69 @@
     place-items:center;
     background:rgba(0,0,0,.22);
     z-index:50;
+    padding:16px;
   }
-
   .overlayCard{
-    width:min(580px,92vw);
+    width:min(580px, 92vw);
+    max-height:min(80vh, 680px);
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
     background:rgba(255,255,255,.26);
     border-radius:28px;
-    padding:20px;
+    padding: clamp(16px, 4vw, 20px);
     text-align:center;
   }
-
   .bouquet{
     width:min(380px,82vw);
-    margin-bottom:10px;
+    margin:0 auto 10px;
+    display:block;
   }
-
   .msgMain{
-    font-size:20px;
+    font-size: clamp(16px, 4.2vw, 20px);
     font-weight:900;
-    line-height:1.3;
+    line-height:1.25;
   }
-
   .msgSmall{
     margin-top:8px;
-    font-size:13px;
+    font-size: clamp(12px, 3.5vw, 13px);
+    line-height:1.35;
   }
-
   .dateMsg{
     margin-top:10px;
-    font-size:15px;
+    font-size: clamp(13px, 3.7vw, 15px);
+    line-height:1.35;
+  }
+
+  /* 🔊 enable-sound pill (only shows if audio is blocked) */
+  #soundGate{
+    position:fixed;
+    left:50%;
+    bottom:16px;
+    transform:translateX(-50%);
+    z-index:9999;
+    display:none;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+    border-radius:999px;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.22);
+    box-shadow: 0 10px 28px rgba(0,0,0,.25);
+    color:#fff;
+    font-size:14px;
+  }
+  #soundGate button{
+    font-size:14px;
+    padding:10px 14px;
+    min-width:unset;
+    border-radius:999px;
+    background: rgba(255,255,255,.18);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .floater{ animation:none; }
+    .confetti{ animation:none; }
   }
 </style>
 </head>
@@ -161,7 +205,7 @@
 <div id="floatLayer"></div>
 
 <main class="card">
-  <h1>Effie John Tobbyson, will you be my Valentine? 💘</h1>
+  <h1>Effie John Tobyson, will you be my Valentine? 💘</h1>
   <p id="sub">Choose wisely 😌💖</p>
 
   <div class="btnRow" id="btnRow">
@@ -172,98 +216,213 @@
 
 <div id="yesOverlay">
   <div class="overlayCard">
-    <img class="bouquet" id="bouquetImg" />
+    <img class="bouquet" id="bouquetImg" alt="Bouquet of red roses" />
 
-    <!-- ❤️ UPDATED MESSAGE -->
     <div class="msgMain">
       Thank you for sticking with me these past two years Muthu 💖
     </div>
 
     <div class="msgSmall">
       You’re beautiful inside and out <br>
-      I am very  lucky to have you in my life.
+      I am very lucky to have you in my life.
     </div>
 
     <div class="dateMsg">
-	I am really sorry for not planning  my holiday and valentine better and
+      I’m really sorry I didn’t plan our holiday + Valentine’s better —<br>
       I hope I can make it up to you on Tuesday 🌹
     </div>
   </div>
 </div>
 
+<!-- ✅ Put these files next to index.html (repo root) -->
+<audio id="loveAudio" preload="auto" loop playsinline>
+  <source src="love.mp3" type="audio/mpeg">
+</audio>
+<audio id="sadViolin" preload="auto" playsinline>
+  <source src="sad-violin.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🔊 only appears if the browser blocks audio -->
+<div id="soundGate">
+  <span>Tap to enable sound 🔊</span>
+  <button id="enableSoundBtn" type="button">Enable</button>
+</div>
+
 <script>
-const yesBtn=document.getElementById("yesBtn");
-const noBtn=document.getElementById("noBtn");
-const sub=document.getElementById("sub");
-const overlay=document.getElementById("yesOverlay");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn  = document.getElementById("noBtn");
+const sub    = document.getElementById("sub");
+const overlay = document.getElementById("yesOverlay");
 
-let yesScale=1;
-let noScale=1;
+const loveAudio = document.getElementById("loveAudio");
+const sadViolin = document.getElementById("sadViolin");
 
-const funnySubs=[
-"Choose wisely 😌💖",
-"Wrong answer detected… 😭",
-"That button looks suspicious 👀",
-"My heart just lagged 💔",
-"Ok… now click YES 🙂"
+const soundGate = document.getElementById("soundGate");
+const enableSoundBtn = document.getElementById("enableSoundBtn");
+
+let yesScale = 1;
+let noScale  = 1;
+
+const funnySubs = [
+  "Choose wisely 😌💖",
+  "Wrong answer detected… 😭",
+  "That button looks suspicious 👀",
+  "My heart just lagged 💔",
+  "Ok… now click YES 🙂"
 ];
+let clicks = 0;
 
-let clicks=0;
+// Keep track of last intended sound action so after “Enable” we do it immediately
+let pendingSound = null; // "love" | "sad" | null
+let soundUnlocked = false;
 
-noBtn.onclick=()=>{
-  clicks++;
-  yesScale*=1.18;
-  noScale*=0.82;
-  yesBtn.style.transform=`scale(${yesScale})`;
-  noBtn.style.transform=`scale(${Math.max(noScale,0.06)})`;
-  sub.textContent=funnySubs[Math.min(clicks,funnySubs.length-1)];
-};
+// --- helpers ---
+function stopAudio(a){
+  a.pause();
+  try { a.currentTime = 0; } catch(e) {}
+}
 
-function confettiBurst(){
-  for(let i=0;i<320;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=`hsl(${Math.random()*360},90%,60%)`;
-    c.style.animationDuration=(2+Math.random()*3)+"s";
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),5000);
+async function tryPlay(a){
+  // Some browsers need volume set before play
+  if (a === loveAudio) a.volume = 0.6;
+  if (a === sadViolin) a.volume = 1.0;
+
+  const p = a.play();
+  if (p && typeof p.then === "function") {
+    await p;
   }
 }
 
-yesBtn.onclick=()=>{
-  document.getElementById("btnRow").style.display="none";
-  overlay.style.display="grid";
-  confettiBurst();
+function showSoundGate(which){
+  pendingSound = which;
+  soundGate.style.display = "flex";
+}
+
+async function unlockSoundAndRun(){
+  // Trick: do a tiny play/pause on both to “unlock”
+  try{
+    soundGate.style.display = "none";
+    soundUnlocked = true;
+
+    // attempt unlock
+    stopAudio(loveAudio);
+    stopAudio(sadViolin);
+
+    await tryPlay(loveAudio);
+    stopAudio(loveAudio);
+
+    // Now perform the pending action
+    if (pendingSound === "sad") {
+      stopAudio(loveAudio);
+      await tryPlay(sadViolin);
+    } else if (pendingSound === "love") {
+      stopAudio(sadViolin);
+      await tryPlay(loveAudio);
+    }
+    pendingSound = null;
+  } catch(e){
+    // If still blocked, keep the button visible
+    soundGate.style.display = "flex";
+  }
+}
+
+enableSoundBtn.addEventListener("click", unlockSoundAndRun);
+
+// --- button logic ---
+noBtn.onclick = async () => {
+  clicks++;
+  yesScale *= 1.18;
+  noScale  *= 0.82;
+
+  yesBtn.style.transform = `scale(${yesScale})`;
+  noBtn.style.transform  = `scale(${Math.max(noScale, 0.06)})`;
+  sub.textContent = funnySubs[Math.min(clicks, funnySubs.length - 1)];
+
+  // 😢 sad violin on NO, stop love if playing
+  stopAudio(loveAudio);
+  stopAudio(sadViolin);
+
+  try{
+    await tryPlay(sadViolin);
+    soundGate.style.display = "none";
+    soundUnlocked = true;
+  }catch(e){
+    showSoundGate("sad");
+  }
 };
 
-/* floating images */
-const floatLayer=document.getElementById("floatLayer");
+function confettiBurst(){
+  const pieces = 320;
+  for(let i=0;i<pieces;i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},90%,60%)`;
+    c.style.animationDuration = (2 + Math.random()*3) + "s";
+    c.style.width  = (6 + Math.random()*9) + "px";
+    c.style.height = (10 + Math.random()*16) + "px";
+    c.style.opacity = (0.7 + Math.random()*0.3);
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5200);
+  }
+}
 
-const catPics=[
-"https://commons.wikimedia.org/wiki/Special:FilePath/Orange-tabby-cat.jpg",
-"https://commons.wikimedia.org/wiki/Special:FilePath/Black%20cat%20(1).jpg",
-"https://commons.wikimedia.org/wiki/Special:FilePath/Cute-cat.jpg"
+yesBtn.onclick = async () => {
+  document.getElementById("btnRow").style.display = "none";
+  overlay.style.display = "grid";
+  confettiBurst();
+
+  // ✅ stop sad violin, start love music
+  stopAudio(sadViolin);
+  stopAudio(loveAudio);
+
+  try{
+    await tryPlay(loveAudio);
+    soundGate.style.display = "none";
+    soundUnlocked = true;
+  }catch(e){
+    showSoundGate("love");
+  }
+};
+
+// --- floating images (same as before) ---
+const floatLayer = document.getElementById("floatLayer");
+
+const catPics = [
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Orange-tabby-cat.jpg",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Black%20cat%20(1).jpg",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Cute-cat.jpg"
 ];
 
-const bouquetPng="https://commons.wikimedia.org/wiki/Special:FilePath/Bouquet-of-Red-Roses.png";
-const rosePng="https://commons.wikimedia.org/wiki/Special:FilePath/Rose_flower.png";
+const bouquetPng = "https://commons.wikimedia.org/wiki/Special:FilePath/Bouquet-of-Red-Roses.png";
+const rosePng    = "https://commons.wikimedia.org/wiki/Special:FilePath/Rose_flower.png";
 
-document.getElementById("bouquetImg").src=bouquetPng;
+document.getElementById("bouquetImg").src = bouquetPng;
 
-function addFloater(src,rose=false){
-  const img=document.createElement("img");
-  img.src=src;
-  img.className="floater"+(rose?" rose":"");
-  img.style.left=Math.random()*100+"vw";
-  img.style.top=Math.random()*100+"vh";
-  img.style.animationDuration=(4+Math.random()*6)+"s";
-  img.onerror=()=>img.remove();
+function addFloater(src, isRose=false){
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "floater" + (isRose ? " rose" : "");
+  img.style.left = Math.random()*100 + "vw";
+  img.style.top  = Math.random()*100 + "vh";
+  img.style.animationDuration = (4 + Math.random()*6) + "s";
+  img.onerror = () => img.remove();
   floatLayer.appendChild(img);
 }
 
-for(let i=0;i<14;i++) addFloater(catPics[Math.floor(Math.random()*catPics.length)]);
-for(let i=0;i<8;i++) addFloater(Math.random()<0.5?rosePng:bouquetPng,true);
+function seedFloaters(){
+  const isSmall = window.matchMedia("(max-width: 480px)").matches;
+  const catCount = isSmall ? 9 : 14;
+  const roseCount = isSmall ? 6 : 8;
+
+  for(let i=0;i<catCount;i++){
+    addFloater(catPics[Math.floor(Math.random()*catPics.length)], false);
+  }
+  for(let i=0;i<roseCount;i++){
+    addFloater(Math.random() < 0.5 ? rosePng : bouquetPng, true);
+  }
+}
+seedFloaters();
 </script>
 
 </body>
